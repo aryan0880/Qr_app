@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="12" dy="12" stdDeviation="0" flood-color="#2B2B2B" />
+    </filter>
+  </defs>
+
+  <!-- Background Tile -->
+  <rect x="32" y="32" width="448" height="448" rx="80" fill="#FFD500" stroke="#2B2B2B" stroke-width="24" filter="url(#shadow)" />
+
+  <!-- Lego Studs -->
+  <g fill="#E6C000" stroke="#2B2B2B" stroke-width="8">
+    <circle cx="120" cy="120" r="32" />
+    <circle cx="256" cy="120" r="32" />
+    <circle cx="392" cy="120" r="32" />
+    <circle cx="120" cy="256" r="32" />
+    <circle cx="392" cy="256" r="32" />
+    <circle cx="120" cy="392" r="32" />
+    <circle cx="256" cy="392" r="32" />
+    <circle cx="392" cy="392" r="32" />
+  </g>
+
+  <!-- Center Card (Optical QR Sensor) -->
+  <rect x="128" y="128" width="256" height="256" rx="36" fill="#FFFFFF" stroke="#2B2B2B" stroke-width="16" />
+
+  <!-- QR Finders (Top-Left, Top-Right, Bottom-Left) -->
+  <!-- TL -->
+  <rect x="156" y="156" width="64" height="64" rx="12" fill="#0057A6" stroke="#2B2B2B" stroke-width="8" />
+  <rect x="174" y="174" width="28" height="28" fill="#FFFFFF" />
+  <!-- TR -->
+  <rect x="292" y="156" width="64" height="64" rx="12" fill="#D01012" stroke="#2B2B2B" stroke-width="8" />
+  <rect x="310" y="174" width="28" height="28" fill="#FFFFFF" />
+  <!-- BL -->
+  <rect x="156" y="292" width="64" height="64" rx="12" fill="#00A650" stroke="#2B2B2B" stroke-width="8" />
+  <rect x="174" y="310" width="28" height="28" fill="#FFFFFF" />
+
+  <!-- Center Light Burst / Data Pixel -->
+  <circle cx="256" cy="256" r="28" fill="#2B2B2B" />
+  <rect x="292" y="292" width="32" height="32" rx="6" fill="#FFD500" stroke="#2B2B2B" stroke-width="6" />
+</svg>

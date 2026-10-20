@@ -1,0 +1,41 @@
+{
+  "name": "qr_app",
+  "version": "1.0.0",
+  "description": "Air-gapped, zero-network optical & acoustic data transfer protocol and PWA web app using light bursts and fountain codes.",
+  "author": "Aryan <aryansonawane094@gmail.com> (https://github.com/aryan0880)",
+  "homepage": "https://github.com/aryan0880/QR_APP#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aryan0880/QR_APP.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port=3000 --host=0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.14",
+    "@vitejs/plugin-react": "^5.0.4",
+    "clsx": "^2.1.1",
+    "jsqr": "^1.4.0",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
+    "pako": "^3.0.1",
+    "qrcode": "^1.5.4",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1",
+    "tailwind-merge": "^3.6.0",
+    "vite": "^6.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@types/pako": "^3.0.0",
+    "@types/qrcode": "^1.5.6",
+    "@vitejs/plugin-basic-ssl": "^2.3.0",
+    "tailwindcss": "^4.1.14",
+    "typescript": "~5.8.2"
+  }
+}

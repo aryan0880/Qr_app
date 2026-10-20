@@ -1,0 +1,7 @@
+{
+  "name": "QRMesh",
+  "description": "Send text, photos, and audio across air-gapped devices using only light bursts — zero internet, zero servers.",
+  "author": "Aryan",
+  "creator": "Aryan",
+  "requestFramePermissions": ["camera"]
+}
