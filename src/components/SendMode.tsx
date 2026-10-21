@@ -5,7 +5,8 @@ import {
   compressAndChunkText, 
   createSampleImageFile, 
   createSampleAudioFile, 
-  getSampleSecretText 
+  getSampleSecretText,
+  ImageQualityPreset
 } from '../utils/dataUtils';
 import { playAcousticChirp } from '../utils/acoustic';
 import { 
@@ -23,13 +24,15 @@ import {
   Maximize2, 
   Minimize2, 
   Volume2, 
-  VolumeX 
+  VolumeX,
+  Sliders
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 export default function SendMode() {
   const [tab, setTab] = useState<'file' | 'text'>('file');
   const [file, setFile] = useState<File | null>(null);
+  const [imageQuality, setImageQuality] = useState<ImageQualityPreset>('balanced');
   const [textInput, setTextInput] = useState<string>('');
   const [activePayload, setActivePayload] = useState<{ type: 'file'; file: File } | { type: 'text'; text: string } | null>(null);
 
@@ -113,7 +116,8 @@ export default function SendMode() {
                   setPrepStatus(s);
                 }
               },
-              useFountain
+              useFountain,
+              imageQuality
             );
           } else {
             generatedChunks = await compressAndChunkText(
@@ -163,7 +167,7 @@ export default function SendMode() {
     return () => {
       isCancelled = true;
     };
-  }, [activePayload, useFountain]);
+  }, [activePayload, useFountain, imageQuality]);
 
   // Transmit loop using RAF for precise frame synchronization & acoustic chirps
   useEffect(() => {
@@ -385,6 +389,59 @@ export default function SendMode() {
                 <p className="font-medium text-[var(--lego-muted)]">
                   Drop or pick a photo / short audio to beam across.
                 </p>
+              </div>
+
+              {/* Photo Quality Selector */}
+              <div className="w-full mt-4 bg-[var(--lego-card)] border-4 border-[var(--lego-border)] rounded-xl p-3 shadow-[4px_4px_0px_var(--lego-border)] flex flex-col gap-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-black uppercase text-[var(--lego-text)] flex items-center gap-1.5">
+                    <Sliders className="w-4 h-4 text-[#0057A6]" />
+                    Photo Quality & Resolution
+                  </span>
+                  <span className="text-xs font-bold text-[var(--lego-muted)]">
+                    {imageQuality === 'fast' && '160px • Ultra Fast'}
+                    {imageQuality === 'balanced' && '320px • Crisp (Recommended)'}
+                    {imageQuality === 'hd' && '480px • High Definition'}
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setImageQuality('fast')}
+                    className={cn(
+                      "py-2 px-1 rounded-lg text-xs font-black uppercase border-2 transition-all text-center",
+                      imageQuality === 'fast'
+                        ? "bg-[#FFD500] border-[var(--lego-border)] text-[#2B2B2B] shadow-[2px_2px_0px_var(--lego-border)]"
+                        : "bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-500 hover:bg-slate-200"
+                    )}
+                  >
+                    ⚡ Fast
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setImageQuality('balanced')}
+                    className={cn(
+                      "py-2 px-1 rounded-lg text-xs font-black uppercase border-2 transition-all text-center",
+                      imageQuality === 'balanced'
+                        ? "bg-[#00A650] border-[#007036] text-white shadow-[2px_2px_0px_#007036]"
+                        : "bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-500 hover:bg-slate-200"
+                    )}
+                  >
+                    ✨ Balanced
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setImageQuality('hd')}
+                    className={cn(
+                      "py-2 px-1 rounded-lg text-xs font-black uppercase border-2 transition-all text-center",
+                      imageQuality === 'hd'
+                        ? "bg-[#0057A6] border-[#003B70] text-white shadow-[2px_2px_0px_#003B70]"
+                        : "bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-500 hover:bg-slate-200"
+                    )}
+                  >
+                    💎 HD Clear
+                  </button>
+                </div>
               </div>
 
               {/* Quick Demo Sample Action Buttons */}

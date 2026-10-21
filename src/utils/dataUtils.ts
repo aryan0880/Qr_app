@@ -60,10 +60,13 @@ function encode8BitWAV(samples: Float32Array, sampleRate: number): ArrayBuffer {
   return buffer;
 }
 
+export type ImageQualityPreset = 'fast' | 'balanced' | 'hd';
+
 export async function compressAndChunkFile(
   file: File,
   onProgress?: (progress: number, status: string) => void,
-  useFountain: boolean = true
+  useFountain: boolean = true,
+  imageQuality: ImageQualityPreset = 'balanced'
 ): Promise<string[]> {
   const wait = () => new Promise(r => setTimeout(r, 25));
 
@@ -102,7 +105,7 @@ export async function compressAndChunkFile(
     onProgress?.(10, "Loading Photo...");
     await wait();
 
-    // Downscale image
+    // Downscale image according to selected quality preset
     const img = new Image();
     const url = URL.createObjectURL(file);
     await new Promise((resolve, reject) => {
@@ -114,33 +117,48 @@ export async function compressAndChunkFile(
     onProgress?.(30, "Optimizing Resolution...");
     await wait();
 
+    // Presets:
+    // fast: 150px, quality 0.25 (ultra fast transfer)
+    // balanced: 320px, quality 0.55 (sharp & crisp on mobile, reasonable packet count)
+    // hd: 480px, quality 0.70 (high clarity details)
+    let maxDimension = 320;
+    let jpegQuality = 0.55;
+
+    if (imageQuality === 'fast') {
+      maxDimension = 160;
+      jpegQuality = 0.25;
+    } else if (imageQuality === 'hd') {
+      maxDimension = 480;
+      jpegQuality = 0.70;
+    }
+
     const canvas = document.createElement('canvas');
-    const MAX_WIDTH = 150; 
-    const MAX_HEIGHT = 150;
     let width = img.width;
     let height = img.height;
 
     if (width > height) {
-      if (width > MAX_WIDTH) {
-        height *= MAX_WIDTH / width;
-        width = MAX_WIDTH;
+      if (width > maxDimension) {
+        height = Math.round((height * maxDimension) / width);
+        width = maxDimension;
       }
     } else {
-      if (height > MAX_HEIGHT) {
-        width *= MAX_HEIGHT / height;
-        height = MAX_HEIGHT;
+      if (height > maxDimension) {
+        width = Math.round((width * maxDimension) / height);
+        height = maxDimension;
       }
     }
 
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext('2d')!;
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
     ctx.drawImage(img, 0, 0, width, height);
     
     onProgress?.(50, "Extracting Image Pixels...");
     await wait();
 
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.2);
+    const dataUrl = canvas.toDataURL('image/jpeg', jpegQuality);
     const base64Data = dataUrl.split(',')[1];
     
     const binStr = window.atob(base64Data);
